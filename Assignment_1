@@ -1,0 +1,175 @@
+class Book:
+    def __init__(self, BookID, Author, BookName, is_borrowed=False):
+        self.BookID=BookID
+        self.BookName=BookName
+        self.Author=Author
+        self.is_borrowed = is_borrowed
+
+    def display(self):
+        status = "Borrowed" if self.is_borrowed else "Available"
+        print(f"Book : {self.BookName}")
+        print(f"Author : {self.Author}")
+        print(f"Status : {status}")
+
+class Patron:
+
+    def __init__(self, name):
+        self.name = name
+        self.borrowed_books = []
+
+    def display(self):
+
+        print("Patron Name : ",self.name)
+
+        if len(self.borrowed_books) == 0:
+            print("Borrowed Books : None")
+        else:
+            print("Borrowed Books :", ", ".join(self.borrowed_books))
+class Library:
+    lib_name="MIT LIBRARY"
+    def __init__(self):
+        self.books = []
+        self.patrons = []
+    def add_book(self,BookID,Author,BookName):
+        book=Book(BookID,Author,BookName)
+        self.books.append(book)
+        print(f"Book '{BookName}' Added Successfully.")
+    def register_patron(self, name):
+
+            patron = Patron(name)
+            self.patrons.append(patron)
+
+            print(f"Patron '{name}' Registered Successfully.")
+    def borrow_book(self, patron_name, book_title):
+
+        patron = None
+        book = None
+
+        for p in self.patrons:
+            if p.name == patron_name:
+                patron = p
+
+        for b in self.books:
+            if b.title == book_title:
+                book = b
+
+        if patron and book:
+
+            if book.is_borrowed == False:
+
+                book.is_borrowed = True
+                patron.borrowed_books.append(book.title)
+
+                print(f"{patron.name} borrowed '{book.title}'.")
+
+            else:
+
+                print("Book is already borrowed.")
+
+        else:
+
+            print("Book or Patron not found.")
+
+    def borrow_book(self, name, BookName):
+
+            patron = None
+            book = None
+
+            for p in self.patrons:
+                if p.name == name:
+                    patron = p
+
+            for b in self.books:
+                if b.BookName == BookName:
+                    book = b
+
+            if patron and book:
+
+                if not book.is_borrowed:
+
+                    book.is_borrowed = True
+                    patron.borrowed_books.append(book.BookName)
+
+                    print(f"{patron.name} borrowed '{book.BookName}'.")
+
+                else:
+                    print("Book is already borrowed.")
+
+            else:
+                print("Book or Patron not found.")
+    def return_book(self, name, BookName):
+
+            patron = None
+            book = None
+
+            for p in self.patrons:
+                if p.name == name:
+                    patron = p
+
+            for b in self.books:
+                if b.BookName == BookName:
+                    book = b
+
+            if patron and book:
+
+                if book.BookName in patron.borrowed_books:
+
+                    patron.borrowed_books.remove(book.BookName)
+                    book.is_borrowed = False
+
+                    print(f"{patron.name} returned '{book.BookName}'.")
+
+                else:
+                    print("This book was not borrowed by the patron.")
+
+            else:
+                print("Book or Patron not found.")
+    def display_books(self):
+
+            print("\nBook List")
+
+            for book in self.books:
+                book.display()
+    def display_patrons(self):
+
+            print("\nPatron List")
+
+            for patron in self.patrons:
+                patron.display()            
+
+
+
+
+
+library = Library()
+A=int(input("Enter Number of Books : "))
+print("Library Name :", Library.lib_name)
+for i in range(A):
+
+    BookID=int(input("Enter Book ID : "))
+    BookName=input("Enter Book Name : ")
+    Author=input("Enter Author Name : ")
+
+
+library.add_book(BookID, Author, BookName)
+B=int(input("Enter Number of Patrons : "))
+for i in range(B):
+    name=input("Enter Patron Name : ")
+    library.register_patron(name)
+
+library.display_books()
+library.display_patrons()
+
+print("\nBorrow Book ")
+library.borrow_book(name, BookName)
+
+print("\n After Borrow ")
+library.display_books()
+library.display_patrons()
+
+print("\n Return Book ")
+library.return_book("Dhruv", "IT")
+
+print("\n Finalally")
+library.display_books()
+library.display_patrons()
